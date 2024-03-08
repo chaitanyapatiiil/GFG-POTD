@@ -18,3 +18,4 @@ public:
 	    if(mnCount==1 and mn==1 and mxCount+mnCount==mm.size())return true;
 	    return false;
 	}
+};
