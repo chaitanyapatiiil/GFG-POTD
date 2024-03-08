@@ -1,29 +1,20 @@
-//User function template for C++
 class Solution{
-public:	
-	bool sameFreq(string s)
+public:
+      bool sameFreq(string s)
 	{
 	    // code here 
-	    int n=s.length();
-	    vector<int>freq(26,0);
-	    for(int i=0;i<s.length();i++){
-	        freq[s[i]-'a']++;
+	    unordered_map<char,int> mm;
+	    for(auto x:s)mm[x]++;
+	    int mn=INT_MAX,mx=INT_MIN,mxCount=0,mnCount=0;
+	    for(auto x:mm){
+	        mn=min(mn,x.second);
+	        mx=max(mx,x.second);
 	    }
-	    sort(freq.begin(), freq.end());
-	    int i=0;
-	    while(i<26 && freq[i]==0){
-	        i++;
+	    for(auto x:mm){
+	        if(x.second==mx)mxCount++;
+	        else if(x.second==mn)mnCount++;
 	    }
-	    if(i==26) return true;
-	    
-	    int curr=freq[i];
-	    while(i<26 && freq[i]==curr){
-	        i++;
-	    }
-	    if(i==26) return true;
-	    
-	    if(i==25 && freq[i]-curr==1) return true;
-	    
+	    if(mn==mx or (mn==mx-1 and mxCount==1))return true;
+	    if(mnCount==1 and mn==1 and mxCount+mnCount==mm.size())return true;
 	    return false;
 	}
-};
