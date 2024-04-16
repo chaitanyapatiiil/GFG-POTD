@@ -1,27 +1,28 @@
 class Solution {
-    public static int minimizeDifference(int n, int k, int[] arr) {
-        // code here
-        int[][] preMinMax = new int[n][2],posMinMax = new int[n][2];
-        preMinMax[0][0] = preMinMax[0][1] = arr[0];
-        posMinMax[n-1][0] = posMinMax[n-1][1] = arr[n-1];
-        for(int i=1;i<n;i++) 
-        {
-            preMinMax[i][0] = Math.min(preMinMax[i-1][0],arr[i]);
-            preMinMax[i][1] = Math.max(preMinMax[i-1][1],arr[i]);
+  public:
+    int minimizeDifference(int n, int k, vector<int> &arr) {
+        vector<int> rightmin(n,0),rightmax(n,0);
+        rightmax[n-1]=arr[n-1];
+        rightmin[n-1]=arr[n-1];
+        for(int i=n-2; i>=0; i--){
+            rightmax[i]=max(rightmax[i+1],arr[i]);
+            rightmin[i]=min(rightmin[i+1],arr[i]);
         }
-        for(int i=n-2;i>=0;i--)
-        {
-            posMinMax[i][0] = Math.min(posMinMax[i+1][0],arr[i]);
-            posMinMax[i][1] = Math.max(posMinMax[i+1][1],arr[i]);
+        int i=0, j=k-1, mini=INT_MAX, maxi=INT_MIN, ans=INT_MAX;
+        while(j<n){
+            if(i!=0){
+                mini = min(arr[i-1],mini);
+                maxi = max(arr[i-1],maxi);
+            }
+            int temp1=mini, temp2=maxi;
+            if(j!=n-1){
+                temp1=min(temp1,rightmin[j+1]);
+                temp2=max(temp2,rightmax[j+1]);
+            }
+            ans = min(ans,abs(temp2-temp1));
+            i++;
+            j++;
         }
-        int ans = posMinMax[k][1]-posMinMax[k][0];
-        for(int i=k+1;i<n;i++)
-        {
-            int curr = Math.max(preMinMax[i-k-1][1],posMinMax[i][1])-Math.min(preMinMax[i-k-1][0],posMinMax[i][0]);
-            ans = Math.min(ans,curr);
-        }
-        ans = Math.min(ans,preMinMax[n-k-1][1]-preMinMax[n-k-1][0]);
-        
         return ans;
     }
-}
+};
